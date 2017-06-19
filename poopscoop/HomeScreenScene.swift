@@ -14,6 +14,7 @@ class HomeScreenScene: SKScene {
     
     
     let startGame = SKLabelNode(fontNamed: "SugarpunchDEMO")
+    let leaderboard = SKLabelNode(fontNamed: "SugarpunchDEMO")
     
     override func didMove(to view: SKView) {
         
@@ -48,6 +49,15 @@ class HomeScreenScene: SKScene {
         
         startGame.zPosition = 1
         self.addChild(startGame)
+        
+        leaderboard.text = "Leaderboard"
+        leaderboard.fontSize = 100
+        leaderboard.name = "leaderboard"
+        leaderboard.fontColor = SKColor.white
+        leaderboard.position = CGPoint(x: self.size.width*0.5, y: self.size.height*0.1)
+        
+        leaderboard.zPosition = 1
+        self.addChild(leaderboard)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -62,6 +72,9 @@ class HomeScreenScene: SKScene {
                 sceneToMoveTo.scaleMode = self.scaleMode
                 let myTransition = SKTransition.fade(withDuration: 0.5)
                 self.view!.presentScene(sceneToMoveTo, transition: myTransition)
+            }else if leaderboard.contains(pointOfTouch){
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "showLeaderboard"), object: nil)
+        
             }
             
         }

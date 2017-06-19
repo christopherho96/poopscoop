@@ -15,6 +15,7 @@ class GameOverScene: SKScene {
     let backToHomeScreenLabel = SKLabelNode(fontNamed: "SugarpunchDEMO")
     
     override func didMove(to view: SKView) {
+        let controller = self.view?.window?.rootViewController as! GameViewController
         let background = SKSpriteNode(imageNamed: "background")
         background.position = CGPoint(x: self.size.width/2, y: self.size.height / 2)
         self.addChild(background)
@@ -37,6 +38,7 @@ class GameOverScene: SKScene {
         gameScoreLabel.zPosition = 1
         self.addChild(gameScoreLabel)
         
+        
         //set high score default each time app is opened
         let defaults = UserDefaults()
         var highScore = defaults.integer(forKey: "highScoreSaved")
@@ -44,6 +46,7 @@ class GameOverScene: SKScene {
         if score > highScore{
             highScore = score
             defaults.set(highScore, forKey: "highScoreSaved")
+            controller.saveHighScore(number: highScore)
         }
         
         //high score label

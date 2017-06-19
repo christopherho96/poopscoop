@@ -321,6 +321,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             poopNode.removeAllActions()
         })
         
+        //stops firedBubbles
+        self.enumerateChildNodes(withName: "bubbleNode", using: { firedBubbles, stop  in
+            firedBubbles.removeAllActions()
+        })
+        
         let changeSceneAction = SKAction.run(changeScene)
         let waitToChangeScene = SKAction.wait(forDuration: 1)
         let changeSceneSequence = SKAction.sequence([waitToChangeScene, changeSceneAction])
@@ -355,7 +360,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         if body1.categoryBitMask == PhysicsCategories.scoopCategory && body2.categoryBitMask == PhysicsCategories.poopCategory{
             
             addScore()
-            body2.node?.removeFromParent()
+            if body2.node != nil{
+                pooSplat(spawnPooSplat: body2.node!.position)
+            }
+                body2.node?.removeFromParent()
             
         }
         
@@ -420,6 +428,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         
         let bubbleExplosionSequence = SKAction.sequence([scaleIn, fadeOut, delete])
         bubbleExplosion.run(bubbleExplosionSequence)
+    }
+    
+    func pooSplat(spawnPooSplat: CGPoint){
+        let pooSplatExplosion = SKSpriteNode(imageNamed: "poosplat")
+        pooSplatExplosion.position = spawnPooSplat
+        pooSplatExplosion.zPosition = 4
+        pooSplatExplosion.setScale(0)
+        self.addChild(pooSplatExplosion)
+        
+        let scaleIn = SKAction.scale(to: 1, duration: 0.1)
+        let fadeOut = SKAction.fadeOut(withDuration: 0.1)
+        let delete = SKAction.removeFromParent()
+        
+        let pooExplosionSequence = SKAction.sequence([scaleIn, fadeOut, delete])
+        pooSplatExplosion.run(pooExplosionSequence)
     }
     
     // increase spawn times after certain amount of points
